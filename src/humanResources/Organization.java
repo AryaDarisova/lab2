@@ -11,8 +11,7 @@ public class Organization {
 
     public Organization(String name) {
         this.name = name;
-        Department[] departments = new Department[8];
-        this.departments = departments;
+        this.departments = new Department[8];  //TODO 8 - в контсанту
     }
 
     /*
@@ -22,6 +21,7 @@ public class Organization {
     public Organization(String name, Department[] departments) {
         this.name = name;
         System.arraycopy(departments, 0, this.departments, 0, 8);
+        //todo size?
     }
 
     /*
@@ -30,6 +30,7 @@ public class Organization {
     */
 
     public void add(Department department) {
+        //TODO расширяй массив
         departments[countDepartments] = department;
         countDepartments++;
     }
@@ -48,6 +49,7 @@ public class Organization {
                 System.arraycopy(departments, i+1, departments, i, countDepartments - i - 1);
                 departments[countDepartments - 1] = null;
                 countDepartments--;
+                break;
             }
         }
     }
@@ -58,7 +60,7 @@ public class Organization {
     */
 
     public Department getDepartment(String name) {
-        Department requiredDepartment = new Department("tmp");
+        Department requiredDepartment = null;
         for (int i = 0; i < countDepartments; i++) {
             if (departments[i].name().equals(name)) {
                 requiredDepartment = departments[i];
@@ -73,7 +75,7 @@ public class Organization {
     */
 
     public Department[] getDepartments() {
-        return departments;
+        return departments; //todo копию созвращаешь, так же как в department
     }
 
     /*
@@ -89,11 +91,11 @@ public class Organization {
     */
 
     public int employeesQuantity() {
-        int employeesInOrganization = 0;
+        int employeesQuantity = 0;
         for (int i = 0; i < countDepartments; i++) {
-            employeesInOrganization += departments[i].size();
+            employeesQuantity += departments[i].size();
         }
-        return employeesInOrganization;
+        return employeesQuantity;
     }
 
     /*
@@ -104,7 +106,7 @@ public class Organization {
     public int employeesQuantity(String jobTitle) {
         int employeesByJob = 0;
         for (int i = 0; i < countDepartments; i++) {
-            for (int j = 0; j < departments[i].size(); j++) {
+            for (int j = 0; j < departments[i].size(); j++) { //todo сделай в departmnet метод и вызывай его
                 if (departments[i].getEmployees()[j].getJobTitle().equals(jobTitle))
                 employeesByJob++;
             }
@@ -120,7 +122,7 @@ public class Organization {
         Employee employeeWithBestSalary = new Employee("tmp", "tmp");
         employeeWithBestSalary = departments[0].getEmployees()[0];
         for (int i = 0; i < countDepartments; i++) {
-            for (int j = 0; j < departments[i].size(); j++) {
+            for (int j = 0; j < departments[i].size(); j++) { //todo сделай в departmnet метод и вызывай его
                 if (departments[i].getEmployees()[j].getSalary() > employeeWithBestSalary.getSalary())
                     employeeWithBestSalary = departments[i].getEmployees()[j];
             }
@@ -136,7 +138,7 @@ public class Organization {
     public Department getEmployeesDepartment(String firstName, String secondName) {
         Department employeesDepartment= new Department("tmp");
         for (int i = 0; i < countDepartments; i++) {
-            for (int j = 0; j < departments[i].size(); j++) {
+            for (int j = 0; j < departments[i].size(); j++) {//todo сделай в departmnet метод hasEmployee(...) и вызывай его
                 if (departments[i].getEmployees()[j].getFirstName().equals(firstName) & departments[i].getEmployees()[j].getSecondName().equals(secondName))
                     employeesDepartment = departments[i];
             }

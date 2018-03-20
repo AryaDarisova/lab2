@@ -4,7 +4,7 @@ public class Department {
     private String name;
     private Employee[] employees;
     private static final int SIZE_DEFAULT = 8;
-    private int elInArray = 0;
+    private int size = 0;
 
     /*
     Конструкторы:
@@ -42,19 +42,13 @@ public class Department {
     */
 
     public void add(Employee employee) {
-        if (elInArray >= employees.length) {
-            Employee[] employeesResize = new Employee[elInArray * 2];
+        if (size >= employees.length) {
+            Employee[] employeesResize = new Employee[size * 2];
             System.arraycopy(employees, 0, employeesResize, 0, employees.length);
             this.employees = employeesResize;
-            employeesResize[elInArray] = employee;
         }
-        else for (int i = 0; i < employees.length; i++) {
-            if (employees[i] == null) {
-                employees[i] = employee;
-                break;
-            }
-        }
-        elInArray++;
+        employees[size] = employee;
+        size++;
     }
 
     /*
@@ -70,20 +64,16 @@ public class Department {
     public boolean remove(String firstName, String secondName) {
         boolean remove = false;
         int removeItems = 0, difference = 0;
-        int[] num = new int[elInArray];
-        for (int i = 0; i < elInArray; i++) {
-            if ((employees[i].getFirstName().equals(firstName)) & (employees[i].getSecondName().equals(secondName))) {
-                num[removeItems] = i;
-                removeItems++;
+        for (int i = 0, j = 0; i < size; i++, j++) {
+            if ((employees[j].getFirstName().equals(firstName)) & (employees[j].getSecondName().equals(secondName))) {
+                i--;
+                remove = true;
+            } else {
+                employees[i] = employees[j];
             }
+
         }
-        num[removeItems] = elInArray;
-        for (int j = 0; j < removeItems; j++) {
-            System.arraycopy(employees, num[j] + 1, employees, num[j] - difference, num[j + 1] - num[j] - 1);
-            difference++;
-            remove = true;
-        }
-        elInArray -= removeItems;
+
         return remove;
     }
 
@@ -92,7 +82,7 @@ public class Department {
     */
 
     public int size() {
-        return elInArray;
+        return size;
     }
 
     /*
@@ -108,8 +98,8 @@ public class Department {
     */
 
     public Employee[] getEmployees() {
-        Employee[] employeesInArray = new Employee[elInArray];
-        System.arraycopy(employees, 0, employeesInArray, 0, elInArray);
+        Employee[] employeesInArray = new Employee[size];
+        System.arraycopy(employees, 0, employeesInArray, 0, size);
         return employeesInArray;
     }
 
@@ -120,20 +110,16 @@ public class Department {
 
     public Employee[] getEmployees(String jobTitle) {
         int peopleByJob = 0;
-        for (int i = 0; i < elInArray; i++) {
+        for (int i = 0; i < size; i++) {
             if (employees[i].getJobTitle().equals(jobTitle)) {
                 peopleByJob++;
             }
         }
         Employee[] employeesByJobTitle = new Employee[peopleByJob];
-        for (int j = 0; j < elInArray; j++) {
+        for (int j = 0, k = 0; j < size; j++) {
             if (employees[j].getJobTitle().equals(jobTitle)) {
-                for (int k = 0; k < peopleByJob; k++) {
-                    if (employeesByJobTitle[k] == null) {
-                        employeesByJobTitle[k] = employees[j];
-                        break;
-                    }
-                }
+                employeesByJobTitle[k] = employees[j];
+                k++;
             }
         }
         return employeesByJobTitle;
@@ -142,9 +128,9 @@ public class Department {
     /*
     -  возвращающий массив сотрудников, отсортированный по убыванию заработной платы.
     */
-
+    //TODO получаешь копию массива и ее сортируешь
     public Employee[] employeesSortedBySalary() {
-        for (int i = elInArray - 1; i > 0; i--) {
+        for (int i = size - 1; i > 0; i--) {
             for (int j = 0; j < i; j++) {
                 if (employees[j].getSalary() < employees[j + 1].getSalary()) {
                     Employee replace = employees[j];
