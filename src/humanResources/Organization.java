@@ -3,15 +3,24 @@ package humanResources;
 public class Organization {
     private String name;
     private Department[] departments;
-    private int countDepartments = 0;
+    private int size = 0;
+    private static final int SIZE = 8;
 
     /*
     Конструкторы: принимающий один параметр – называние организации.
     */
 
     public Organization(String name) {
+        this(name, SIZE);
+    }
+
+    /*
+    принимающий два параметра - назввние и количество департаментов
+     */
+
+    public Organization(String name, int size) {
         this.name = name;
-        this.departments = new Department[8];  //TODO 8 - в контсанту
+        this.departments = new Department[size];
     }
 
     /*
@@ -20,8 +29,7 @@ public class Organization {
 
     public Organization(String name, Department[] departments) {
         this.name = name;
-        System.arraycopy(departments, 0, this.departments, 0, 8);
-        //todo size?
+        System.arraycopy(departments, 0, this.departments, 0, SIZE);
     }
 
     /*
@@ -31,8 +39,13 @@ public class Organization {
 
     public void add(Department department) {
         //TODO расширяй массив
-        departments[countDepartments] = department;
-        countDepartments++;
+        if (size >= departments.length) {
+            Department[] departmentResize = new Department[size * 2];
+            System.arraycopy(departments, 0, departmentResize, 0, departments.length);
+            this.departments = departmentResize;
+        }
+        departments[size] = department;
+        size++;
     }
 
     /*
@@ -40,16 +53,12 @@ public class Organization {
     */
 
     public void removeDepartment(String name) {
-        for (int i = 0; i < countDepartments; i++) {
+        for (int i = 0; i < size; i++) {
             if (departments[i].name().equals(name)) {
-                if (i == countDepartments) {
-                    departments[countDepartments] = null;
-                    countDepartments--;
+                for (int j = i + 1; j < size; j++) {
+                    departments[i] = departments[j];
                 }
-                System.arraycopy(departments, i+1, departments, i, countDepartments - i - 1);
-                departments[countDepartments - 1] = null;
-                countDepartments--;
-                break;
+                size--;
             }
         }
     }
@@ -61,7 +70,7 @@ public class Organization {
 
     public Department getDepartment(String name) {
         Department requiredDepartment = null;
-        for (int i = 0; i < countDepartments; i++) {
+        for (int i = 0; i < size; i++) {
             if (departments[i].name().equals(name)) {
                 requiredDepartment = departments[i];
                 return requiredDepartment;
@@ -75,7 +84,10 @@ public class Organization {
     */
 
     public Department[] getDepartments() {
-        return departments; //todo копию созвращаешь, так же как в department
+        Department[] getDepartments = new Department[size];
+        System.arraycopy(departments, 0, getDepartments, 0, size);
+        //return departments; //todo копию созвращаешь, так же как в department
+        return getDepartments;
     }
 
     /*
@@ -83,7 +95,7 @@ public class Organization {
     */
 
     public int size() {
-        return countDepartments;
+        return size;
     }
 
     /*
@@ -92,7 +104,7 @@ public class Organization {
 
     public int employeesQuantity() {
         int employeesQuantity = 0;
-        for (int i = 0; i < countDepartments; i++) {
+        for (int i = 0; i < size; i++) {
             employeesQuantity += departments[i].size();
         }
         return employeesQuantity;
@@ -104,14 +116,11 @@ public class Organization {
     */
 
     public int employeesQuantity(String jobTitle) {
-        int employeesByJob = 0;
-        for (int i = 0; i < countDepartments; i++) {
-            for (int j = 0; j < departments[i].size(); j++) { //todo сделай в departmnet метод и вызывай его
-                if (departments[i].getEmployees()[j].getJobTitle().equals(jobTitle))
-                employeesByJob++;
-            }
+        int employeesQuantity = 0;
+        for (int i = 0; i < size; i++) {
+            employeesQuantity += departments[i].employeesQuatityByJob(jobTitle);
         }
-        return employeesByJob;
+        return employeesQuantity;
     }
 
     /*
@@ -119,15 +128,14 @@ public class Organization {
     */
 
     public Employee bestEmployee() {
-        Employee employeeWithBestSalary = new Employee("tmp", "tmp");
-        employeeWithBestSalary = departments[0].getEmployees()[0];
-        for (int i = 0; i < countDepartments; i++) {
-            for (int j = 0; j < departments[i].size(); j++) { //todo сделай в departmnet метод и вызывай его
-                if (departments[i].getEmployees()[j].getSalary() > employeeWithBestSalary.getSalary())
-                    employeeWithBestSalary = departments[i].getEmployees()[j];
+        Employee bestEmployee = null;
+        bestEmployee = departments[0].getEmployees()[0];
+        for (int i = 0; i < size; i++) {
+            if (departments[i].bestEmployeeInDepartment().getSalary() > bestEmployee.getSalary()) {
+                bestEmployee = departments[i].bestEmployeeInDepartment();
             }
         }
-        return employeeWithBestSalary;
+        return bestEmployee;
     }
 
     /*
@@ -136,13 +144,12 @@ public class Organization {
     */
 
     public Department getEmployeesDepartment(String firstName, String secondName) {
-        Department employeesDepartment= new Department("tmp");
-        for (int i = 0; i < countDepartments; i++) {
-            for (int j = 0; j < departments[i].size(); j++) {//todo сделай в departmnet метод hasEmployee(...) и вызывай его
-                if (departments[i].getEmployees()[j].getFirstName().equals(firstName) & departments[i].getEmployees()[j].getSecondName().equals(secondName))
-                    employeesDepartment = departments[i];
+        Department getEmployeesDepartment = null;
+        for (int i = 0; i < size; i++) {
+            if (departments[i].hasEmployee(firstName, secondName)) {
+                getEmployeesDepartment = departments[i];
             }
         }
-        return employeesDepartment;
+        return getEmployeesDepartment;
     }
 }

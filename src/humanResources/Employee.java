@@ -5,6 +5,8 @@ public class Employee {
     private String secondName;
     private String jobTitle;
     private int salary;
+    private static final String JOB_TITLE = "";
+    private static final int SALARY = 0;
 
     /*
     Конструкторы:
@@ -14,8 +16,7 @@ public class Employee {
     //TODO конструктор с меньшим числом параметров вызывает конструктор с большим числом параметров
     //TODO значения по умолчанию в константы класса
     public Employee(String firstName, String secondName) {
-        this.firstName = firstName;
-        this.secondName = secondName;
+        this(firstName, secondName, JOB_TITLE, SALARY);
     }
 
     public Employee(String firstName, String secondName, String jobTitle, int salary) {

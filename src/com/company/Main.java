@@ -65,8 +65,8 @@ public class Main {
 
         organization.add(group2);
 
-        System.out.println("\nNumber of employees in the Organization: " +organization.employeesQuantity());
-        System.out.println("\nNumber of directors in the Organization: " +organization.employeesQuantity("Director"));
+        System.out.println("\nNumber of employees in the Organization: " + organization.employeesQuantity());
+        System.out.println("\nNumber of directors in the Organization: " + organization.employeesQuantity("Director"));
         System.out.println();
 
         for (int i = 0; i < organization.size(); i++)
@@ -80,4 +80,3 @@ public class Main {
         System.out.println("\nName of Best Employee: " + organization.bestEmployee().getFirstName() + " " + organization.bestEmployee().getSecondName());
     }
 }
-

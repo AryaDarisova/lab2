@@ -63,17 +63,15 @@ public class Department {
 
     public boolean remove(String firstName, String secondName) {
         boolean remove = false;
-        int removeItems = 0, difference = 0;
-        for (int i = 0, j = 0; i < size; i++, j++) {
+        for (int j = 0; j < size; j++) {
             if ((employees[j].getFirstName().equals(firstName)) & (employees[j].getSecondName().equals(secondName))) {
-                i--;
+                for (int i = j + 1; i < size; i++) {
+                    employees[j] = employees[i];
+                }
+                size--;
                 remove = true;
-            } else {
-                employees[i] = employees[j];
             }
-
         }
-
         return remove;
     }
 
@@ -111,14 +109,14 @@ public class Department {
     public Employee[] getEmployees(String jobTitle) {
         int peopleByJob = 0;
         for (int i = 0; i < size; i++) {
-            if (employees[i].getJobTitle().equals(jobTitle)) {
+            if (getEmployees()[i].getJobTitle().equals(jobTitle)) {
                 peopleByJob++;
             }
         }
         Employee[] employeesByJobTitle = new Employee[peopleByJob];
         for (int j = 0, k = 0; j < size; j++) {
-            if (employees[j].getJobTitle().equals(jobTitle)) {
-                employeesByJobTitle[k] = employees[j];
+            if (getEmployees()[j].getJobTitle().equals(jobTitle)) {
+                employeesByJobTitle[k] = getEmployees()[j];
                 k++;
             }
         }
@@ -128,17 +126,62 @@ public class Department {
     /*
     -  возвращающий массив сотрудников, отсортированный по убыванию заработной платы.
     */
-    //TODO получаешь копию массива и ее сортируешь
     public Employee[] employeesSortedBySalary() {
+        Employee[] employeesSortedBySalary = new Employee[size];
+        System.arraycopy(getEmployees(), 0, employeesSortedBySalary, 0, size);
         for (int i = size - 1; i > 0; i--) {
             for (int j = 0; j < i; j++) {
-                if (employees[j].getSalary() < employees[j + 1].getSalary()) {
-                    Employee replace = employees[j];
-                    employees[j] = employees[j + 1];
-                    employees[j + 1] = replace;
+                if (employeesSortedBySalary[j].getSalary() < employeesSortedBySalary[j + 1].getSalary()) {
+                    Employee replace = employeesSortedBySalary[j];
+                    employeesSortedBySalary[j] = employeesSortedBySalary[j + 1];
+                    employeesSortedBySalary[j + 1] = replace;
                 }
             }
         }
-        return employees;
+        return employeesSortedBySalary;
+    }
+
+    /*
+    Метод, возвращающий количство сотрудников с заданной должностью
+     */
+
+    public int employeesQuatityByJob (String jobTitle) {
+        int employeesQuantity = 0;
+        for (int i = 0; i < size; i++) {
+            if (getEmployees()[i].getJobTitle().equals(jobTitle)) {
+                employeesQuantity++;
+            }
+        }
+        return employeesQuantity;
+    }
+
+    /*
+    Метод, возвращающий лучшего работника
+     */
+
+    public Employee bestEmployeeInDepartment() {
+        Employee bestEmployeeInDepartment = null;
+        bestEmployeeInDepartment = getEmployees()[0];
+        for (int i = 0; i < size; i++) {
+            if (getEmployees()[i].getSalary() > bestEmployeeInDepartment.getSalary()) {
+                bestEmployeeInDepartment = getEmployees()[i];
+            }
+        }
+        return bestEmployeeInDepartment;
+    }
+
+    /*
+    Метод, определяющий наличие сотрудника в отделе
+     */
+
+    public boolean hasEmployee(String firstName, String secondName) {
+        boolean hasEmployee = false;
+        for (int i = 0; i < size; i++) {
+            if (getEmployees()[i].getFirstName().equals(firstName) & getEmployees()[i].getSecondName().equals(secondName)) {
+                hasEmployee = true;
+                return hasEmployee;
+            }
+        }
+        return hasEmployee;
     }
 }
