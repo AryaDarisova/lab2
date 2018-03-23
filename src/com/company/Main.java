@@ -46,17 +46,14 @@ public class Main {
         }
 
         System.out.println("Sorted by Salary: ");
-        group.employeesSortedBySalary();
-        for (int i = 0; i < group.size(); i++) {
-            System.out.println("Employee[" + (i + 1) + "]: " + group.getEmployees()[i].getFirstName() + " " + group.getEmployees()[i].getSecondName() +
-                    " " + group.getEmployees()[i].getJobTitle() + " " + group.getEmployees()[i].getSalary());
+        for (Employee sort: group.employeesSortedBySalary()) {
+            System.out.println(sort.getFirstName() + " " + sort.getSecondName() + " " + sort.getJobTitle() + " " + sort.getSalary());
         }
 
         Organization organization = new Organization("Organization of Penguins");
         Department group2 = new Department("Royal Penguins", 4);
         group2.add(worker3);
         group2.add(worker4);
-
 
         organization.add(group);
         organization.add(group2);

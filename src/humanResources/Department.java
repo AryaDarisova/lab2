@@ -126,10 +126,11 @@ public class Department {
     /*
     -  возвращающий массив сотрудников, отсортированный по убыванию заработной платы.
     */
+
     public Employee[] employeesSortedBySalary() {
-        Employee[] employeesSortedBySalary = new Employee[size];
-        System.arraycopy(getEmployees(), 0, employeesSortedBySalary, 0, size);
-        for (int i = size - 1; i > 0; i--) {
+        Employee[] employeesSortedBySalary = new Employee[getEmployees().length];
+        System.arraycopy(getEmployees(), 0, employeesSortedBySalary, 0, getEmployees().length);
+        for (int i = employeesSortedBySalary.length - 1; i > 0; i--) {
             for (int j = 0; j < i; j++) {
                 if (employeesSortedBySalary[j].getSalary() < employeesSortedBySalary[j + 1].getSalary()) {
                     Employee replace = employeesSortedBySalary[j];
